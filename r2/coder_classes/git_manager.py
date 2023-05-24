@@ -13,7 +13,7 @@ class GitManager(FileManager):
         self.commands = Commands(io, self)
         self.show_diffs = True
         self.abs_fnames = set()
-        self.last_asked_for_commit_time = 0
+        self.last_asked_for_commit_time = float()
         self.last_r2_commit_hash = None
         self.pretty = None
 
@@ -46,9 +46,9 @@ class GitManager(FileManager):
 
         diff_file_names = self.get_diffs_file_names("HEAD", "--", relative_dirty_fnames)
 
-        self._queue_test_changes(diff_file_names)
-        self._queue_spec_file(diff_file_names)
-
+        self.io.queue.enqueue(('execute_command', '/spec_file', diff_file_names))
+        self.io.queue.enqueue(('execute_command', '/unit_test', diff_file_names))
+        
         commit_hash, commit_message = self._perform_commit(
             relative_dirty_fnames, commit_message, prefix)
         self.last_asked_for_commit_time = self.get_last_modified()
@@ -276,10 +276,10 @@ class GitManager(FileManager):
 
         self.io.tool()
 
-        if res.lower() not in ["y", "yes"] and res:
-            commit_message = res
-
-        return commit_message
+        if res.lower() in ["n", "no"]:
+            return
+        else:
+            return res
 
     def _perform_commit(self, relative_dirty_fnames, commit_message, prefix):
         """Perform the commit."""
