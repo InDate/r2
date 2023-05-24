@@ -1,18 +1,18 @@
 # built from aider and auto-gpt.
 
 # Prompt based development. 
-Built on the code from of Aider[https://github.com/paul-gauthier/aider] / Auto-GPT[https://github.com/Significant-Gravitas/Auto-GPT] and GPT4, `r2` is for the new era of prompt-based developers. 
+Built upon the code from of Aider[https://github.com/paul-gauthier/aider] / Auto-GPT[https://github.com/Significant-Gravitas/Auto-GPT] and GPT4, `r2` is for the new era of prompt-based developers. 
 
 R2 can be prompted to modify or create new code, it can develop it's own test's, execute the tests and debug/repair mistakes as they arise. When the changes are testing successfully, `r2` will prompt you to commit to the repo, complete with message.
 
-With the tool, you can ask GPT for features, improvements, or bug fixes and `r2` will apply the suggested changes to source files.
+With the tool, you can ask for features, improvements, or bug fixes and `r2` will apply the suggested changes to source files.
 
-Note: this version has been a self-referencing tool, used to develop itself. My ambition is to add ReAct based logic, method by method editing and a jupyter style GUI. Sending an entire file to GPT-4 is expensive and quickly limited by context size. 
+Note: this version has been a self-referencing tool, used to develop itself. My intention is to add ReAct based logic, method by method editing and a jupyter style GUI. Sending an entire file to GPT-4 is expensive and quickly limited by context size. 
 
 To use r2, you will require your own GPT-4 API key. 
-'r2' can execute .py files that have 'test' in the name.
+'r2' will prompt to execute .py files through unit tests and commands. This could result in bad things happening to the operating system and it's files if not carefully monitored. 
 
-Available on - Discord[https://discord.gg/YaqMe653]
+Happy to chat, available on - Discord[https://discord.gg/YaqMe653] or Twitter.
 
 ## Features
 
