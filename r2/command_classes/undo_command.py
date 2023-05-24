@@ -9,10 +9,10 @@ from prompt_toolkit.completion import Completion
 
 class UndoCommand(BaseCommand):
     def __init__(self, io, coder):
+        __doc__ = 'Will undo the last git commit if it was performed by r2'
         super().__init__(io, coder)
 
     def run(self, args):
-        "Undo the last git commit if it was done by r2"
         result = self.undo_command(prompts)
         if result.startswith("Error"):
             self.io.tool_error(result)
@@ -35,12 +35,14 @@ class UndoCommand(BaseCommand):
             return "The repository has uncommitted changes. Please commit or stash them before undoing."
 
         local_head = self.coder.repo.git.rev_parse("HEAD")
-        has_origin = any(remote.name == "origin" for remote in self.coder.repo.remotes)
+        has_origin = any(
+            remote.name == "origin" for remote in self.coder.repo.remotes)
 
         if has_origin:
             current_branch = self.coder.repo.active_branch.name
             try:
-                remote_head = self.coder.repo.git.rev_parse(f"origin/{current_branch}")
+                remote_head = self.coder.repo.git.rev_parse(
+                    f"origin/{current_branch}")
             except git.exc.GitCommandError:
                 return f"Error: Unable to get the remote 'origin/{current_branch}'."
 

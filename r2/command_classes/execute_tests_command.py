@@ -8,7 +8,7 @@ from r2.utils import check_file_exists, get_file, is_file_type
 class ExecuteTestsCommand(BaseCommand):
     def __init__(self, io, coder):
         super().__init__(io, coder)
-        self.__doc__ = 'Used to execute unit tests for submitted file, will prompt to create if cannot be found'
+        __doc__ = 'Used to execute unit tests for submitted file, will prompt to create if cannot be found'
 
     def run(self, args, **kwargs):
         if args.isspace() or args == '':
