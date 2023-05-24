@@ -31,9 +31,10 @@ class ExecuteTestsCommand(BaseCommand):
             for word in args.split():
                 matched_files = [file for file in files if word in file]
 
-            if file in files:
+            for file in matched_files:
                 # TODO: This is referencing coding class, better to add to queue.
-                self.coder._test_changes_before_commit(file)
+                self.io.queue.enqueue(('execute_command', '/execute_file',
+                                      file))
 
     def create_unit_test(self, program_file, test_file, spec_file=None):
         new_message = prompts.professional_tester.format(
