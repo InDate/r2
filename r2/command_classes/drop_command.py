@@ -18,7 +18,7 @@ class DropCommand(BaseCommand):
                 if word.lower() in os.path.relpath(file, self.coder.root).lower()
             ]
             if word == 'all':
-                matched_files = self.coder.abs_fnames
+                matched_files = list(self.coder.abs_fnames)
             elif not matched_files:
                 self.io.tool_error(f"No files matched '{word}'")
 
