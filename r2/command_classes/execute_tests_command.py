@@ -30,7 +30,7 @@ class ExecuteTestsCommand(BaseCommand):
                 matched_files = [file for file in files if word in file]
 
             if matched_files:
-                self.execute_unit_test(matched_files)
+                self.execute_unit_test(matched_files, files)
             else: 
                 self.io.tool_error('File not part of git repo')
 
@@ -53,7 +53,7 @@ class ExecuteTestsCommand(BaseCommand):
             if partial.lower() in fname.lower():
                 yield Completion(fname, start_position=-len(partial))
 
-    def execute_unit_test(self, updated_files, auto_commit=False):
+    def execute_unit_test(self, updated_files, all_files, auto_commit=False):
         # Implement the logic to run tests
         # Return True if tests pass, False otherwise
         to_front_of_queue = True if auto_commit else False
@@ -65,18 +65,18 @@ class ExecuteTestsCommand(BaseCommand):
             if is_file_type('tests', updated_file):
                 return
 
-            if not updated_file.endswith('.py') or not updated_file.endswith('.md'):
+            if not updated_file.endswith('.py'):
                 return
 
             test_file_abs_path = get_file(updated_file, 'py', 'test', self.coder.test_dir)
             test_file = os.path.relpath(test_file_abs_path, self.coder.root)
 
             if not self.io.confirm_ask(
-                    f"Test changes to {updated_file} [y/n]]?"):
+                    f"Execute unit tests for {updated_file} [y/n]]?"):
                 self.io.tool(f"Skipped: {test_file}")
                 return
 
-            if check_file_exists(test_file_abs_path):
+            if check_file_exists(test_file_abs_path, all_files):
                 # TODO: Add further logic to extend unit_test if change are significant.
                 self.io.queue.enqueue(('execute_command', '/execute_file',
                                       test_file), to_front=to_front_of_queue)
