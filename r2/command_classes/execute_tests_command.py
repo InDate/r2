@@ -25,8 +25,9 @@ class ExecuteTestsCommand(BaseCommand):
             test_file = kwargs.get("test_file")
             spec_file = kwargs.get("spec_file")
             self.create_unit_test(args, test_file, spec_file)
-        elif args == ' all':
-            self.io.tool_error('NOT IMPLEMENTED: Execute all unit tests')
+        elif args == 'all':
+            self.io.queue.enqueue(("execute_command", "/execute_command",
+                                      {"function_name":"execute_python_test_all"}))
         elif not args:
             self.io.tool_error(f'File not found in Git Repo: {args}')
         else:
@@ -73,12 +74,12 @@ class ExecuteTestsCommand(BaseCommand):
 
             if check_file_exists(test_file, all_files):
                 # TODO: Add further logic to extend unit_test if change are significant.
-                self.io.queue.enqueue(('execute_command', '/execute_command',
-                                      test_file), to_front=True)
+                self.io.queue.enqueue(('execute_command', '/execute_command', test_file, 
+                                       {"function_name":"execute_python_test"}), to_front=True)
 
             elif self.io.confirm_ask(f"Test file: {test_file} not found, create test now?"):
-                self.io.queue.enqueue(
-                    ('execute_command', '/execute_command', test_file), to_front=True)
+                self.io.queue.enqueue(('execute_command', '/execute_command', 
+                                       test_file, {"function_name":"execute_python_test"}), to_front=True)
                 self.io.queue.enqueue(('execute_command', '/unit_test', updated_file,
                                       {"create_unit_tests": True, "test_file": test_file}), to_front=True)
                 self.io.queue.enqueue(('execute_command', '/add', updated_file), to_front=True)

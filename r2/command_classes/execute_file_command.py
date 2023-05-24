@@ -38,10 +38,11 @@ class ExecuteFileCommand(BaseCommand):
         else:
             execute_function = getattr(execute_command, 'execute_python_file')
 
-        process = Process(target=run_async_function, args=(
-            execute_function, args, files, self.queue))
-        process.start()
-        process.join()
+        for file in args:
+            process = Process(target=run_async_function, args=(
+                execute_function, file, files, self.queue))
+            process.start()
+            process.join()
 
         try:
             while not self.queue.empty():
