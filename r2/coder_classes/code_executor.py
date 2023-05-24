@@ -237,7 +237,7 @@ class CodeExecutor(GitManager):
     def clear_chat(self):
         self.io.tool('Clearing previous messages and dropping files from chat')
         self.current_messages = []
-        self.io.queue.enqueue(('execute_command', '/drop', 'all', {"notify":False}), to_front=True)
+        self.io.queue.enqueue(('execute_command', '/drop', 'all', {"disable_notify":True}), to_front=True)
 
     def run_loop(self):
         new_action = self.io.queue.dequeue()
