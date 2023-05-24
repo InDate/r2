@@ -20,7 +20,6 @@ class ExecuteFileCommand(BaseCommand):
 
     def run(self, args, **kwargs):
         files = self.coder.get_all_relative_files()
-        result = []
 
         if (isinstance(args, str)):
             if args.isspace() or args == '':
@@ -35,6 +34,8 @@ class ExecuteFileCommand(BaseCommand):
                 execute_command, kwargs.get("function_name"))
             process = Process(target=run_async_function, args=(
                 execute_function, self.queue))
+            process.start()
+            process.join()
         elif len(args) == 0:
             self.io.tool_error(f'File not found in Git Repo: {args}')
             return
