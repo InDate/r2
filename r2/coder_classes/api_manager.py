@@ -2,7 +2,7 @@ from __future__ import annotations
 import time
 
 import openai
-from openai.error import RateLimitError, APIConnectionError, APIError
+from openai.error import RateLimitError, APIConnectionError, APIError, Timeout
 
 from r2.config import Config
 from r2.coder_classes.api_models_info import MODELS
@@ -75,8 +75,8 @@ class ApiManager:
         except APIConnectionError:
             retry_after = 1
             time.sleep(retry_after)
-        except APIError:
-            retry_after = 1
+        except (APIError, Timeout):
+            retry_after = 5
             time.sleep(retry_after)
         finally:
             self.update_cost(model)
