@@ -12,25 +12,19 @@ class SpecFileCommand(BaseCommand):
         super().__init__(io, coder)
 
     def run(self, args, **kwargs):
-        if isinstance(args, str) and args.isspace():
-            self.io.tool_error("Add a file name to use this command")
-            return
-
-        create_spec_file = kwargs.get("create_spec_file")
-
-        if create_spec_file:
-            self.create_spec_file(args, kwargs.get("spec_file_git_path"))
-
-        else:
-            files = self.coder.get_all_relative_files()
+        if (isinstance(args, str)):
+            if args.isspace():
+                self.io.tool_error("Add a file name to use this command")
+                return
 
             for word in args.split():
-                matched_files = [file for file in files if word in file]
+                args = [file for file in files if word in file]
 
-            if matched_files:
-                self.get_spec_file(matched_files, files)
-            else:
-                self.io.tool_error('File not part of git repo')
+        if kwargs.get("create_spec_file"):
+            self.create_spec_file(args, kwargs.get("spec_file_git_path"))
+        else:
+            files = self.coder.get_all_relative_files()
+            self.get_spec_file(args, files)
 
     def create_spec_file(self, program_file, spec_file):
         new_message = prompts.spec.format(
@@ -62,6 +56,11 @@ class SpecFileCommand(BaseCommand):
                 return
 
             if is_file_type('spec', updated_file):
+                return
+
+            if updated_file not in all_files:
+                self.io.tool_error(
+                    f'File Not found within git repo: {updated_file}')
                 return
 
             spec_file = get_file(updated_file, 'md',

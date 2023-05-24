@@ -11,28 +11,25 @@ class ExecuteTestsCommand(BaseCommand):
         self.__doc__ = 'Used to execute unit tests for submitted file, will prompt to create if cannot be found'
 
     def run(self, args, **kwargs):
-        if args.isspace() or args == '':
-            self.io.tool_error("Add a file name to use this command")
-            return
+        files = self.coder.get_all_relative_files()
+        
+        if (isinstance(args, str)):
+            if args.isspace() or args == '':
+                self.io.tool_error("Provide a file name to use this command")
+                return
 
-        create_unit_test = kwargs.get("create_unit_tests")
-
-        if create_unit_test:
+            for word in args.split():
+                args = [file for file in files if word in file]
+        
+        if kwargs.get("create_unit_tests"):
             test_file = kwargs.get("test_file")
             spec_file = kwargs.get("spec_file")
             self.create_unit_test(args, test_file, spec_file)
         elif args == ' all':
             self.io.tool_error('NOT IMPLEMENTED: Execute all unit tests')
         else:
-            files = self.coder.get_all_relative_files()
+            self.execute_unit_test(args, files)
 
-            for word in args.split():
-                matched_files = [file for file in files if word in file]
-
-            if matched_files:
-                self.execute_unit_test(matched_files, files)
-            else: 
-                self.io.tool_error('File not part of git repo')
 
     def create_unit_test(self, program_file, test_file, spec_file=None):
         new_message = prompts.professional_tester.format(
@@ -53,11 +50,7 @@ class ExecuteTestsCommand(BaseCommand):
             if partial.lower() in fname.lower():
                 yield Completion(fname, start_position=-len(partial))
 
-    def execute_unit_test(self, updated_files, all_files, auto_commit=False):
-        # Implement the logic to run tests
-        # Return True if tests pass, False otherwise
-        to_front_of_queue = True if auto_commit else False
-
+    def execute_unit_test(self, updated_files, all_files):
         for updated_file in updated_files:
             if is_file_type('spec', updated_file):
                 return
@@ -79,7 +72,7 @@ class ExecuteTestsCommand(BaseCommand):
             if check_file_exists(test_file, all_files):
                 # TODO: Add further logic to extend unit_test if change are significant.
                 self.io.queue.enqueue(('execute_command', '/execute_file',
-                                      test_file), to_front=to_front_of_queue)
+                                      test_file), to_front=True)
 
             elif self.io.confirm_ask(f"Test file: {test_file} not found, create test now?"):
                 self.io.queue.enqueue(
