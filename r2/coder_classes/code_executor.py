@@ -283,7 +283,7 @@ class CodeExecutor(GitManager):
 
     def run(self):
         self.done_messages = []
-        self.clear_chat()
+        self.current_messages = []
 
         self.num_control_c = 0
 
