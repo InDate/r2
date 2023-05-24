@@ -76,7 +76,7 @@ class ExecuteTestsCommand(BaseCommand):
                 self.io.tool(f"Skipped: {test_file}")
                 return
 
-            if check_file_exists(test_file_abs_path, all_files):
+            if check_file_exists(test_file, all_files):
                 # TODO: Add further logic to extend unit_test if change are significant.
                 self.io.queue.enqueue(('execute_command', '/execute_file',
                                       test_file), to_front=to_front_of_queue)
