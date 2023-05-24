@@ -14,6 +14,7 @@ class GitManager(FileManager):
         self.show_diffs = True
         self.abs_fnames = set()
         self.last_asked_for_commit_time = 0
+        self.last_r2_commit_hash = None
         self.pretty = None
 
     def get_diffs(self, *args):
