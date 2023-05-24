@@ -230,6 +230,7 @@ class CodeExecutor(GitManager):
 
     def clear_chat(self):
         self.current_messages = []
+        self.io.queue.enqueue(('execute_command', '/drop', True), to_front=True)
 
     def run_loop(self):
         new_action = self.io.queue.dequeue()

@@ -120,7 +120,7 @@ class GitManager(FileManager):
             if self.is_file_type('tests', updated_file):
                 return
 
-            if not updated_file.endswith('.py'):
+            if not updated_file.endswith('.py') or not updated_file.endswith('.md'):
                 return
 
             test_file_abs_path = self.get_file(updated_file, 'py', 'test', self.test_dir)
