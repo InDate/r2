@@ -12,9 +12,11 @@ class SpecFileCommand(BaseCommand):
         super().__init__(io, coder)
 
     def run(self, args, **kwargs):
+        files = self.coder.get_all_relative_files()
+
         if (isinstance(args, str)):
-            if args.isspace():
-                self.io.tool_error("Add a file name to use this command")
+            if args.isspace() or args == '':
+                self.io.tool_error("Provide a file name to use this command")
                 return
 
             for word in args.split():
@@ -23,7 +25,6 @@ class SpecFileCommand(BaseCommand):
         if kwargs.get("create_spec_file"):
             self.create_spec_file(args, kwargs.get("spec_file_git_path"))
         else:
-            files = self.coder.get_all_relative_files()
             self.get_spec_file(args, files)
 
     def create_spec_file(self, program_file, spec_file):
@@ -49,9 +50,7 @@ class SpecFileCommand(BaseCommand):
                 yield Completion(fname, start_position=-len(partial))
 
     def get_spec_file(self, updated_files, all_files):
-        # build spec for file
         for updated_file in updated_files:
-            # test_file - do not spec
             if is_file_type('tests', updated_file):
                 return
 
