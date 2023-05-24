@@ -10,24 +10,29 @@ class ExecuteTestsCommand(BaseCommand):
         super().__init__(io, coder)
         self.__doc__ = 'Used to execute unit tests for submitted file, will prompt to create if cannot be found'
 
+    def parse_input(self, args, files):
+        if args.isspace() or args == '':
+            self.io.tool_error("Provide a file name to use this command")
+            return None
+        elif args == ' all':
+            return 'all'
+        
+        for word in args.split():
+            return [file for file in files if word in file]
+
+    
     def run(self, args, **kwargs):
         files = self.coder.get_all_relative_files()
-        
         if (isinstance(args, str)):
-            if args.isspace() or args == '':
-                self.io.tool_error("Provide a file name to use this command")
-                return
-
-            for word in args.split():
-                args = [file for file in files if word in file]
-
+            args = self.parse_input(args, files)
+            
         if kwargs.get("create_unit_tests"):
             test_file = kwargs.get("test_file")
             spec_file = kwargs.get("spec_file")
             self.create_unit_test(args, test_file, spec_file)
         elif args == 'all':
             self.io.queue.enqueue(("execute_command", "/execute_command",
-                                      {"function_name":"execute_python_test_all"}))
+                                {"function_name":"execute_python_test_all"}))
         elif not args:
             self.io.tool_error(f'File not found in Git Repo: {args}')
         else:
