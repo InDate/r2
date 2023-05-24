@@ -7,6 +7,8 @@ class CommitCommand(BaseCommand):
 
     def run(self, args):
         result = self.commit_command(args)
+
+        # TODO commit_command is not returning a result.
         if result:
             self.io.tool_error(result)
         else:
