@@ -50,6 +50,7 @@ class Commands:
 
         self.command_methods = {
             "/execute_file": ExecuteFileCommand(self.io, self.coder),
+            "/execute_command": ExecuteFileCommand(self.io, self.coder),
             "/add": AddCommand(self.io, self.coder),  # Create an instance of AddCommand
             "/commit": CommitCommand(self.io, self.coder),
             "/ls": LSCommand(self.io, self.coder),
