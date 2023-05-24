@@ -64,11 +64,12 @@ class SpecFileCommand(BaseCommand):
                 return
 
             spec_file = get_file(updated_file, 'md',
-                                 'spec', self.root + '/spec/')
-            spec_file_git_path = os.path.relpath(spec_file, self.root)
+                                 'spec', self.coder.root + '/spec/')
+            spec_file_git_path = os.path.relpath(spec_file, self.coder.root)
 
             if not check_file_exists(spec_file, all_files):
-                spec_file_git_path = os.path.relpath(spec_file, self.root)
+                spec_file_git_path = os.path.relpath(
+                    spec_file, self.coder.root)
 
                 if self.io.confirm_ask(
                         f"Spec file: {spec_file_git_path} not found, create before commit [y/n]?"):
