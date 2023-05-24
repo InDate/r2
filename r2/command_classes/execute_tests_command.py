@@ -31,8 +31,8 @@ class ExecuteTestsCommand(BaseCommand):
             spec_file = kwargs.get("spec_file")
             self.create_unit_test(args, test_file, spec_file)
         elif args == 'all':
-            self.io.queue.enqueue(("execute_command", "/execute_command", "",
-                                {"function_name":"execute_python_test_all"}))
+            self.io.queue.enqueue(("execute_command", "/execute_command", "all",
+                                {"function_name":"execute_python_test"}))
         elif not args:
             self.io.tool_error(f'File not found in Git Repo: {args}')
         else:

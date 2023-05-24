@@ -11,30 +11,6 @@ def find_common_root(files):
         return os.getcwd()
 
 
-async def execute_python_test_all(test_directory, queue: Queue):
-    "Execute a Python test"
-    try:
-        queue.put(
-            {f"status": "status", "message": "Performing unit test for all tests"})
-        process = await asyncio.create_subprocess_exec(
-            "python3", "-m", "unittest", "discover", "-s", test_directory,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        stdout, stderr = await process.communicate()
-        returncode = process.returncode
-    except Exception as e:
-        queue.put({"status": "error", "message": str(e)})
-        raise
-
-    if returncode != 0:
-        queue.put({"status": "error", "message": str(stderr)})
-    elif len(stdout) > 0:
-        queue.put({"status": "success", "message": str(stdout)})
-
-    return
-
-
 async def execute_python_test(file, files, queue: Queue):
     "Execute a Python test"
     root = find_common_root(files)
@@ -47,13 +23,22 @@ async def execute_python_test(file, files, queue: Queue):
         raise ValueError("Invalid file type. Only test files.")
 
     try:
-        queue.put(
-            {f"status": "status", "message": "Performing Unit test: %s" % filename})
-        process = await asyncio.create_subprocess_exec(
-            "python3", "-m", "unittest", filename,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
+        if file == 'all':
+            queue.put(
+                {f"status": "status", "message": "Performing unit test with all tests"})
+            process = await asyncio.create_subprocess_exec(
+                "python3", "-m", "unittest", "discover", "-s", files,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+        else:
+            queue.put(
+                {f"status": "status", "message": "Performing Unit test: %s" % filename})
+            process = await asyncio.create_subprocess_exec(
+                "python3", "-m", "unittest", filename,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
         stdout, stderr = await process.communicate()
         returncode = process.returncode
     except Exception as e:
