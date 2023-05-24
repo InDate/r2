@@ -257,6 +257,8 @@ class CodeExecutor(GitManager):
 
         if user_input.startswith("/"):
             return self.commands.run(user_input)
+        
+        return self.send_new_command_message(user_input)
 
     def process_action(self, action):
         kwargs = action[4] if len(action) > 4 else {}
