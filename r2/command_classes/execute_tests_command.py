@@ -19,7 +19,7 @@ class ExecuteTestsCommand(BaseCommand):
                 return
 
             for word in args.split():
-                args = [file for file in files if word in file]
+                git_files = [file for file in files if word in file]
         
         if kwargs.get("create_unit_tests"):
             test_file = kwargs.get("test_file")
@@ -27,8 +27,10 @@ class ExecuteTestsCommand(BaseCommand):
             self.create_unit_test(args, test_file, spec_file)
         elif args == ' all':
             self.io.tool_error('NOT IMPLEMENTED: Execute all unit tests')
+        elif len(git_files) == 0:
+            self.io.tool_error(f'File not found in Git Repo: {args}')
         else:
-            self.execute_unit_test(args, files)
+            self.execute_unit_test(git_files, files)
 
 
     def create_unit_test(self, program_file, test_file, spec_file=None):

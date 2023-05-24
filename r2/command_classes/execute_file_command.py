@@ -15,27 +15,37 @@ def run_async_function(func, *args):
 class ExecuteFileCommand(BaseCommand):
     def __init__(self, io, coder):
         super().__init__(io, coder)
+        self.queue = Queue()
         self.__doc__ = 'Used to run python files, can override class ExecuteFileCommand to change functionality'
 
     def run(self, args, **kwargs):
         files = self.coder.get_all_relative_files()
-        queue = Queue()
-        internal_function_name = kwargs.get("function_name")
 
-        if internal_function_name:
-            execute_function = getattr(execute_command, internal_function_name)
+        if (isinstance(args, str)):
+            if args.isspace() or args == '':
+                self.io.tool_error("Provide a file name to use this command")
+                return
+
+            for word in args.split():
+                git_files = [file for file in files if word in file]
+
+        if kwargs.get("function_name"):
+            execute_function = getattr(
+                execute_command, kwargs.get("function_name"))
+        elif len(git_files) == 0:
+            self.io.tool_error(f'File not found in Git Repo: {args}')
+            return
         else:
-            # Original execution logic
             execute_function = getattr(execute_command, 'execute_python_file')
 
         process = Process(target=run_async_function, args=(
-            execute_function, args, files, queue))
+            execute_function, args, files, self.queue))
         process.start()
         process.join()
 
         try:
-            while not queue.empty():
-                result = queue.get()
+            while not self.queue.empty():
+                result = self.queue.get()
                 return self.process_queue(result, args)
         finally:
             return self.process_queue(result, args)
