@@ -28,7 +28,8 @@ class FileContentCompleter(Completer):
             except ClassNotFound:
                 continue
             tokens = list(lexer.get_tokens(content))
-            self.words.update(token[1] for token in tokens if token[0] in Token.Name)
+            self.words.update(token[1]
+                              for token in tokens if token[0] in Token.Name)
 
     def get_completions(self, document, complete_event):
         text = document.text_before_cursor
@@ -107,7 +108,8 @@ class InputOutput():
             common_prefix = os.path.commonpath(fnames)
             if not common_prefix.endswith(os.path.sep):
                 common_prefix += os.path.sep
-            short_fnames = [fname.replace(common_prefix, "", 1) for fname in fnames]
+            short_fnames = [fname.replace(common_prefix, "", 1)
+                            for fname in fnames]
         elif len(fnames):
             short_fnames = [os.path.basename(fnames[0])]
         else:

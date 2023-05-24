@@ -4,6 +4,7 @@ import argparse
 from r2.coder import Coder
 from r2.coder_classes.api_manager import ApiManager
 from r2.io import InputOutput
+from r2.utils import extract_last_running_cost
 
 
 def main(args=None, input=None, output=None):
@@ -101,7 +102,8 @@ def main(args=None, input=None, output=None):
 
     io.tool(*sys.argv, log_only=True)
 
-    api_manager = ApiManager()
+    total_cost = extract_last_running_cost(args.chat_history_file)
+    api_manager = ApiManager(total_cost)
 
     coder = Coder(
         args.model,

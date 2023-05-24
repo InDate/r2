@@ -31,13 +31,15 @@ def try_dotdotdots(whole, part, replace):
         return
 
     # Compare odd strings in part_pieces and replace_pieces
-    all_dots_match = all(part_pieces[i] == replace_pieces[i] for i in range(1, len(part_pieces), 2))
+    all_dots_match = all(part_pieces[i] == replace_pieces[i]
+                         for i in range(1, len(part_pieces), 2))
 
     if not all_dots_match:
         raise ValueError("Unmatched ... in edit block")
 
     part_pieces = [part_pieces[i] for i in range(0, len(part_pieces), 2)]
-    replace_pieces = [replace_pieces[i] for i in range(0, len(replace_pieces), 2)]
+    replace_pieces = [replace_pieces[i]
+                      for i in range(0, len(replace_pieces), 2)]
 
     pairs = zip(part_pieces, replace_pieces)
     for part, replace in pairs:
@@ -51,7 +53,8 @@ def try_dotdotdots(whole, part, replace):
             continue
 
         if part not in whole:
-            raise ValueError("No perfect matching chunk in edit block with ...")
+            raise ValueError(
+                "No perfect matching chunk in edit block with ...")
 
         whole = whole.replace(part, replace)
 
@@ -85,7 +88,7 @@ def replace_most_similar_chunk(whole, part, replace):
 
     for length in range(min_len, max_len):
         for i in range(len(whole_lines) - length + 1):
-            chunk = whole_lines[i : i + length]
+            chunk = whole_lines[i: i + length]
             chunk = "\n".join(chunk)
 
             similarity = SequenceMatcher(None, chunk, part).ratio()
@@ -168,7 +171,8 @@ def do_replace(fname, before_text, after_text, dry_run=False):
             # first populating an empty file
             new_content = after_text
     else:
-        new_content = replace_most_similar_chunk(content, before_text, after_text)
+        new_content = replace_most_similar_chunk(
+            content, before_text, after_text)
         if not new_content:
             return
 
@@ -196,7 +200,8 @@ UPDATED = ">>>>>>> UPDATED"
 
 separators = "|".join([ORIGINAL, DIVIDER, UPDATED])
 
-split_re = re.compile(r"^((?:" + separators + r")[ ]*\n)", re.MULTILINE | re.DOTALL)
+split_re = re.compile(
+    r"^((?:" + separators + r")[ ]*\n)", re.MULTILINE | re.DOTALL)
 
 
 def find_original_update_blocks(content):
@@ -227,7 +232,8 @@ def find_original_update_blocks(content):
             if not len(filename) or "`" in filename:
                 filename = processed[-2].splitlines()[-2].strip()
                 if not len(filename) or "`" in filename:
-                    raise ValueError(f"Bad/missing filename. It should go right above {ORIGINAL}")
+                    raise ValueError(
+                        f"Bad/missing filename. It should go right above {ORIGINAL}")
 
             original_text = pieces.pop()
             processed.append(original_text)
@@ -250,10 +256,12 @@ def find_original_update_blocks(content):
         raise ValueError(f"{processed}\n^^^ {err}")
     except IndexError:
         processed = "".join(processed)
-        raise ValueError(f"{processed}\n^^^ Incomplete ORIGINAL/UPDATED block.")
+        raise ValueError(
+            f"{processed}\n^^^ Incomplete ORIGINAL/UPDATED block.")
     except Exception:
         processed = "".join(processed)
-        raise ValueError(f"{processed}\n^^^ Error parsing ORIGINAL/UPDATED block.")
+        raise ValueError(
+            f"{processed}\n^^^ Error parsing ORIGINAL/UPDATED block.")
 
 
 if __name__ == "__main__":
@@ -280,7 +288,7 @@ def remove_unneeded_symbols(text: str) -> str:
     message = re.sub(r'[^a-zA-Z0-9 \/:_\.]+', ' ', text)
     cleaned_text = re.sub(r'([^\w\s])\1+', r'\1', message)
     return cleaned_text
-import re
+
 
 def extract_last_running_cost(file_path):
     with open(file_path, 'r') as file:
