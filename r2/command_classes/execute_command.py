@@ -12,16 +12,6 @@ def find_common_root(files):
 
 
 async def execute_python_test(file, files, queue: Queue):
-    "Execute a Python test"
-    root = find_common_root(files)
-    filename = os.path.abspath(os.path.join(root, file))
-
-    if not filename.endswith(".py"):
-        raise ValueError("Invalid file type. Only .py files.")
-
-    if "test" not in os.path.basename(filename):
-        raise ValueError("Invalid file type. Only test files.")
-
     try:
         if file == 'all':
             queue.put(
@@ -32,6 +22,15 @@ async def execute_python_test(file, files, queue: Queue):
                 stderr=asyncio.subprocess.PIPE
             )
         else:
+            root = find_common_root(files)
+            filename = os.path.abspath(os.path.join(root, file))
+
+            if not filename.endswith(".py"):
+                raise ValueError("Invalid file type. Only .py files.")
+
+            if "test" not in os.path.basename(filename):
+                raise ValueError("Invalid file type. Only test files.")
+
             queue.put(
                 {f"status": "status", "message": "Performing Unit test: %s" % filename})
             process = await asyncio.create_subprocess_exec(
@@ -39,6 +38,7 @@ async def execute_python_test(file, files, queue: Queue):
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )
+
         stdout, stderr = await process.communicate()
         returncode = process.returncode
     except Exception as e:

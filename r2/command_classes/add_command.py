@@ -1,7 +1,6 @@
 from r2 import prompts
 from .base_command import BaseCommand
 import os
-from rich.prompt import Confirm
 from prompt_toolkit.completion import Completion
 
 
@@ -11,9 +10,10 @@ class AddCommand(BaseCommand):
         super().__init__(io, coder)
 
     def run(self, args):
-        if args.isspace():
-            self.io.tool_error("Add a file name to use this command")
-            return
+        files = self.coder.get_all_relative_files()
+
+        if (isinstance(args, str)):
+            args = self.parse_input(args, files, add=True)
 
         added_file_names = self.add_files_command(args)
 
@@ -23,43 +23,14 @@ class AddCommand(BaseCommand):
             for fname in added_file_names:
                 self.io.tool(f"Added {fname} to the chat")
 
-            # only reply if there's been some chatting since the last edit
+            # add prompt backed to LLM, if responding to add files
             if self.coder.current_messages:
                 reply = prompts.added_files.format(
                     fnames=", ".join(added_file_names))
                 return reply
 
-    def add_files_command(self, args):
+    def add_files_command(self, matched_files):
         added_fnames = []
-        matched_files = []
-        files = self.coder.get_all_relative_files()
-
-        for word in args.split():
-            matched_files = [file for file in files if word in file]
-
-        if not matched_files:
-
-            if self.coder.repo is not None and word is not None:
-                create_file = Confirm.ask(
-                    f"No files matched '{word}'. Do you want to create the file and add it to git?",
-                )
-            else:
-                create_file = Confirm.ask(
-                    f"No files matched '{word}'. Do you want to create the file?"
-                )
-
-            if create_file:
-                with open(os.path.join(self.coder.root, word), "w"):
-                    pass
-                matched_files = [word]
-                if self.coder.repo is not None:
-                    self.coder.repo.git.add(
-                        os.path.join(self.coder.root, word))
-                    commit_message = f"r2: Created and added {word} to git."
-                    self.coder.repo.git.commit(
-                        "-m", commit_message, "--no-verify")
-            else:
-                return f"No files matched '{word}'"
 
         for matched_file in matched_files:
             abs_file_path = os.path.abspath(

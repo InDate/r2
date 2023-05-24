@@ -9,17 +9,6 @@ class ExecuteTestsCommand(BaseCommand):
     def __init__(self, io, coder):
         super().__init__(io, coder)
         self.__doc__ = 'Used to execute unit tests for submitted file, will prompt to create if cannot be found'
-
-    def parse_input(self, args, files):
-        if args.isspace() or args == '':
-            self.io.tool_error("Provide a file name to use this command")
-            return None
-        elif args == ' all':
-            return 'all'
-        
-        for word in args.split():
-            return [file for file in files if word in file]
-
     
     def run(self, args, **kwargs):
         files = self.coder.get_all_relative_files()
@@ -30,7 +19,7 @@ class ExecuteTestsCommand(BaseCommand):
             test_file = kwargs.get("test_file")
             spec_file = kwargs.get("spec_file")
             self.create_unit_test(args, test_file, spec_file)
-        elif args == 'all':
+        elif 'all' in args:
             self.io.queue.enqueue(("execute_command", "/execute_command", "all",
                                 {"function_name":"execute_python_test"}))
         elif not args:

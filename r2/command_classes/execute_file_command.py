@@ -16,21 +16,17 @@ class ExecuteFileCommand(BaseCommand):
     def __init__(self, io, coder):
         super().__init__(io, coder)
         self.queue = Queue()
-        self.__doc__ = 'Used to run python files, can override class ExecuteFileCommand to change functionality'
+        self.__doc__ = 'Use to execute python file and commands, can override class ExecuteFileCommand to change functionality'
 
     def run(self, args, **kwargs):
         files = self.coder.get_all_relative_files()
         result = []
 
         if (isinstance(args, str)):
-            if args.isspace() or args == '':
-                self.io.tool_error("Provide a file name to use this command")
-                return
-
-            for word in args.split():
-                args = [file for file in files if word in file]
+            args = self.parse_input(args, files)
 
         if kwargs.get("function_name"):
+            files = self.coder.test_dir if 'all' in args else files
             execute_function = getattr(
                 execute_command, kwargs.get("function_name"))
         elif len(args) == 0:
