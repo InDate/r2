@@ -234,10 +234,13 @@ class CodeExecutor(GitManager):
 
         self.get_file_mentions(content)
 
-    def clear_chat(self):
-        self.io.tool('Clearing previous messages and dropping files from chat')
-        self.current_messages = []
-        self.io.queue.enqueue(('execute_command', '/drop', 'all', {"disable_notify":True}), to_front=True)
+    def clear_chat(self, confirmed=False):
+        if not confirmed:
+            confirmed = self.io.confirm_ask(
+                        f"Clear previous messages and drop files from chat [y/n]?")
+        if confirmed: 
+            self.current_messages = []
+            self.io.queue.enqueue(('execute_command', '/drop', 'all', {"disable_notify":True}), to_front=True)
 
     def run_loop(self):
         new_action = self.io.queue.dequeue()
@@ -258,7 +261,7 @@ class CodeExecutor(GitManager):
                 dict(role="user", content=prompts.files_content_local_edits),
                 dict(role="assistant", content="Ok."),
             ]
-            self.clear_chat()
+            self.clear_chat(True)
 
         if not user_input:
             return
