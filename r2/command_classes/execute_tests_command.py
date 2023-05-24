@@ -22,7 +22,7 @@ class ExecuteTestsCommand(BaseCommand):
             test_file = kwargs.get("test_file")
             spec_file = kwargs.get("spec_file")
             self.create_unit_test(args, test_file, spec_file)
-        elif args == 'all':
+        elif args == ' all':
             self.io.tool_error('to be implemented')
         else:
             file = args.split()[0]
