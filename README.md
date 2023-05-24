@@ -51,8 +51,6 @@ You can also use additional command-line options to customize the behavior of th
 
 - `--input-history-file INPUT_HISTORY_FILE`: Specify the chat input history file (default: .r2.input.history). Override the default with the environment variable `r2_INPUT_HISTORY_FILE`.
 - `--chat-history-file CHAT_HISTORY_FILE`: Specify the chat history file (default: .r2.chat.history.md). Override the default with the environment variable `r2_CHAT_HISTORY_FILE`.
-- `--model MODEL`: Specify the model to use for the main chat (default: gpt-4). Override the default with the environment variable `r2_MODEL`.
-- `-3`: Use gpt-3.5-turbo model for the main chat (not advised). No environment variable override.
 - `--no-pretty`: Disable pretty, colorized output. Override the default with the environment variable `r2_PRETTY` (default: 1 for enabled, 0 for disabled).
 - `--no-auto-commits`: Disable auto commit of changes. Override the default with the environment variable `r2_AUTO_COMMITS` (default: 1 for enabled, 0 for disabled).
 - `--show-diffs`: Show diffs when committing changes (default: False). Override the default with the environment variable `r2_SHOW_DIFFS` (default: 0 for False, 1 for True).

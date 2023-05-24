@@ -44,13 +44,6 @@ def main(args=None, input=None, output=None):
         help=f"Specify the model to use for the main chat (default: gpt-4, ${env_prefix}MODEL)",
     )
     parser.add_argument(
-        "-3",
-        action="store_const",
-        dest="model",
-        const="gpt-3.5-turbo",
-        help="Use gpt-3.5-turbo model for the main chat (not advised)",
-    )
-    parser.add_argument(
         "--no-pretty",
         action="store_false",
         dest="pretty",
