@@ -1,5 +1,4 @@
 
-.r2.*
 .vscode/settings.json
 *.pyc
 .env
