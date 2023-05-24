@@ -1,3 +1,4 @@
+import os
 import re
 import math
 
@@ -298,3 +299,50 @@ def extract_last_running_cost(file_path):
     if matches:
         return float(matches[-1])
     return None
+
+
+def is_file_type(file_type, file_path):
+    """Checks if the file is within the testing directory."""
+    return file_type in file_path.split(os.path.sep)
+
+
+def remove_path_and_extension(file_path):
+    file_path, file_name = os.path.split(file_path)
+    if file_name.isspace():
+        file_name = file_path
+    file_has_extension = len(os.path.split(file_name)) == 2
+    if file_has_extension:
+        file_name = os.path.splitext(file_name)[0]
+    return file_name
+
+
+def get_file(file_path, extension, type_file, directory):
+    """Returns the equiv test file in the testing folder."""
+    file_name = remove_path_and_extension(file_path)
+    file = f"{type_file}_{file_name}.{extension}"
+    type_directory = get_full_directory(file_path, directory)
+    return os.path.join(type_directory, file)
+
+
+def check_file_exists(file, all_files):
+    """Checks if file exists."""
+    file_exist = file in all_files
+    return file_exist
+
+
+def get_full_directory(current_directory, new_directory):
+    """takes current directory and adds path for spec or test"""
+    current_directory = remove_first_directory(current_directory)
+    just_dir = os.path.split(current_directory)[0]
+    return os.path.join(new_directory, just_dir)
+
+
+def remove_first_directory(file_path):
+    head, tail = os.path.split(file_path)
+    head_parts = head.split(os.sep)
+    if len(head_parts) > 1:
+        new_head = os.path.join(*head_parts[1:])
+        new_path = os.path.join(new_head, tail)
+        return new_path
+    else:
+        return tail

@@ -3,6 +3,8 @@ from r2 import prompts
 from r2.command_classes.base_command import BaseCommand
 from prompt_toolkit.completion import Completion
 
+from r2.utils import check_file_exists, get_file, is_file_type
+
 
 class SpecFileCommand(BaseCommand):
     def __init__(self, io, coder):
@@ -27,7 +29,8 @@ class SpecFileCommand(BaseCommand):
                 matched_files = [file for file in files if word in file]
 
             for matched_file in matched_files:
-                abs_file_path = os.path.abspath(os.path.join(self.coder.root, matched_file))
+                abs_file_path = os.path.abspath(
+                    os.path.join(self.coder.root, matched_file))
 
             self.io.tool_error(
                 f"To implement /spec_file function from CLI - called for {abs_file_path}")
@@ -42,8 +45,10 @@ class SpecFileCommand(BaseCommand):
             self.coder.get_message("system", prompts.system_reminder),
             self.coder.get_message("user", new_message)
         ]
-        self.io.queue.enqueue(('send_new_command_message', messages, "Spec File"), to_front=True)
-        self.io.queue.enqueue(('execute_command', '/add', program_file), to_front=True)
+        self.io.queue.enqueue(
+            ('send_new_command_message', messages, "Spec File"), to_front=True)
+        self.io.queue.enqueue(
+            ('execute_command', '/add', program_file), to_front=True)
 
     def completions_spec_file(self, partial):
         files = set(self.coder.get_all_relative_files())
@@ -51,3 +56,31 @@ class SpecFileCommand(BaseCommand):
         for fname in files:
             if partial.lower() in fname.lower():
                 yield Completion(fname, start_position=-len(partial))
+
+    def _queue_spec_file(self, updated_files):
+        # build spec for file
+        for updated_file in updated_files:
+            # test_file - do not spec
+            if is_file_type('tests', updated_file):
+                return
+
+            if is_file_type('spec', updated_file):
+                return
+
+            spec_file = get_file(updated_file, 'md',
+                                 'spec', self.root + '/spec/')
+            spec_file_git_path = os.path.relpath(spec_file, self.root)
+
+            if not check_file_exists(spec_file):
+                spec_file_git_path = os.path.relpath(spec_file, self.root)
+
+                if self.io.confirm_ask(
+                        f"Spec file: {spec_file_git_path} not found, create before commit [y/n]?"):
+                    # TODO: Need to ensure that add file is only adding and removing for the task required, might be better to put add commands in execute_command process.
+                    self.io.queue.enqueue(('execute_command', '/spec_file', updated_file, {
+                                          "create_spec_file": True, "spec_file_git_path": spec_file_git_path}), to_front=True)
+            # else:
+                # TODO: Add further logic to extend unit_test if change are significant.
+                # self.io.tool(f"Spec File Found: {spec_file_git_path}")
+
+        return spec_file_git_path

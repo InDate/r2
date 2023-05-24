@@ -79,71 +79,6 @@ class GitManager(FileManager):
 
         return
 
-    def _queue_spec_file(self, updated_files):
-        # build spec for file
-        for updated_file in updated_files:
-            # test_file - do not spec
-            if self.is_file_type('tests', updated_file):
-                return
-
-            if self.is_file_type('spec', updated_file):
-                return
-
-            spec_file = self.get_file(updated_file, 'md', 'spec', self.root + '/spec/')
-            spec_file_git_path = os.path.relpath(spec_file, self.root)
-
-            if not self.check_file_exists(spec_file):
-                spec_file_git_path = os.path.relpath(spec_file, self.root)
-
-                if self.io.confirm_ask(
-                        f"Spec file: {spec_file_git_path} not found, create before commit [y/n]?"):
-                    # TODO: Need to ensure that add file is only adding and removing for the task required, might be better to put add commands in execute_command process.
-                    self.io.queue.enqueue(('execute_command', '/spec_file', updated_file, {
-                                          "create_spec_file": True, "spec_file_git_path": spec_file_git_path}), to_front=True)
-            # else:
-                # TODO: Add further logic to extend unit_test if change are significant.
-                # self.io.tool(f"Spec File Found: {spec_file_git_path}")
-
-        return spec_file_git_path
-
-    def _queue_test_changes(self, updated_files, auto_commit=False):
-        # Implement the logic to run tests
-        # Return True if tests pass, False otherwise
-        to_front_of_queue = True if auto_commit else False
-
-        if isinstance(updated_files, str):
-            updated_files = [updated_files]
-
-        for updated_file in updated_files:
-            if self.is_file_type('spec', updated_file):
-                return
-
-            if self.is_file_type('tests', updated_file):
-                return
-
-            if not updated_file.endswith('.py') or not updated_file.endswith('.md'):
-                return
-
-            test_file_abs_path = self.get_file(updated_file, 'py', 'test', self.test_dir)
-            test_file = os.path.relpath(test_file_abs_path, self.root)
-
-            if not self.io.confirm_ask(
-                    f"Test changes to {updated_file} [y/n]]?"):
-                self.io.tool(f"Skipped: {test_file}")
-                return
-
-            if self.check_file_exists(test_file_abs_path):
-                # TODO: Add further logic to extend unit_test if change are significant.
-                self.io.queue.enqueue(('execute_command', '/execute_file',
-                                      test_file), to_front=to_front_of_queue)
-
-            elif self.io.confirm_ask(f"Test file: {test_file} not found, queue create test?"):
-                # testing file does not exist. Need to create testing file here.
-                self.io.queue.enqueue(
-                    ('execute_command', '/execute_file', test_file), to_front=True)
-                self.io.queue.enqueue(('execute_command', '/unit_test', updated_file,
-                                      {"create_unit_tests": True, "test_file": test_file}), to_front=True)
-                self.io.queue.enqueue(('execute_command', '/add', updated_file), to_front=True)
 
     def set_repo(self, cmd_line_fnames):
         if not cmd_line_fnames:
@@ -212,6 +147,7 @@ class GitManager(FileManager):
                 return
 
         self.repo = repo
+        
 
     def get_all_abs_files(self):
         files = self.get_all_relative_files()

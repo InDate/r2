@@ -3,6 +3,7 @@ from .base_command import BaseCommand
 
 class DiffCommand(BaseCommand):
     def __init__(self, io, coder):
+        self.__doc__ = 'Shows the diff from the last commit within r2'
         super().__init__(io, coder)
 
     def run(self, args):
