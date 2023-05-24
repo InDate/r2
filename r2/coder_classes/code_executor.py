@@ -39,7 +39,13 @@ class CodeExecutor(GitManager):
                     temperature=temperature
                 )
                 break
-            self.show_send_output(completion, silent)
+            
+            if completion is None:
+                raise AttributeError("Data is of NoneType")
+            else:
+                self.show_send_output(completion, silent)
+        except AttributeError as e:
+            self.io.tool_error(f"API returned: {e}")
         except KeyboardInterrupt:
             interrupted = True
         except TokensExceedsModel as e:
@@ -55,7 +61,7 @@ class CodeExecutor(GitManager):
         try:
             if live:
                 live.start()
-
+                
             for chunk in completion:
                 self.api_manager.update_completion_tokens(1)
                 self.handle_chunk(chunk, silent, live)
