@@ -15,6 +15,7 @@ def run_async_function(func, *args):
 class ExecuteFileCommand(BaseCommand):
     def __init__(self, io, coder):
         super().__init__(io, coder)
+        self.__doc__ = 'Used to run python files, can override class ExecuteFileCommand to change functionality'
 
     def run(self, args, **kwargs):
         files = self.coder.get_all_relative_files()
