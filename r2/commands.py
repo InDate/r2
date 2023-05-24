@@ -89,7 +89,7 @@ class Commands:
             if first_word == "/help":
                 self.help()
             elif first_word == "/clear":
-                self.clear_chat()
+                self.coder.clear_chat()
             elif first_word == "/test_connection":
                 self.test_connection()
             else:
