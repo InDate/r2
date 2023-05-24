@@ -12,7 +12,7 @@ class ExecuteTestsCommand(BaseCommand):
             use to extract information from code file.
             output of program: provides a list of functions with descriptions
         '''
-        if args.isspace():
+        if args.isspace() or args == '':
             self.io.tool_error("Add a file name to use this command")
             return
 
