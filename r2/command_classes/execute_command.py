@@ -39,14 +39,16 @@ async def execute_python_file(args, files, queue: Queue):
 
     try:
         if is_test_file:
-            queue.put({f"status": "status", "message": "Performing Unit test: %s" % filename})
+            queue.put(
+                {f"status": "status", "message": "Performing Unit test: %s" % filename})
             process = await asyncio.create_subprocess_exec(
                 "python3", "-m", "unittest", filename,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )
         else:
-            queue.put({"status": "status", "message": "Executing File: %s" % filename})
+            queue.put(
+                {"status": "status", "message": "Executing File: %s" % filename})
             process = await asyncio.create_subprocess_exec(
                 "python3", filename,
                 stdout=asyncio.subprocess.PIPE,
@@ -61,7 +63,7 @@ async def execute_python_file(args, files, queue: Queue):
 
     if returncode != 0:
         queue.put({"status": "error", "message": str(stderr)})
-    elif stdout is not None:
+    elif len(stdout) > 0:
         queue.put({"status": "success", "message": str(stdout)})
 
     return
