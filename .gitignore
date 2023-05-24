@@ -1,0 +1,11 @@
+
+.r2.*
+.vscode/settings.json
+*.pyc
+.env
+.vscode/launch.json
+chat_history.txt
+.DS_Store
+build/*
+r2.egg-info/*
+dist/*
