@@ -7,6 +7,7 @@ from prompt_toolkit.completion import Completion
 
 class AddCommand(BaseCommand):
     def __init__(self, io, coder):
+        self.__doc__ = 'Adds files into the chat. Once a file is added, the contents are shared with the LLM'
         super().__init__(io, coder)
 
     def run(self, args):
@@ -24,7 +25,8 @@ class AddCommand(BaseCommand):
 
             # only reply if there's been some chatting since the last edit
             if self.coder.current_messages:
-                reply = prompts.added_files.format(fnames=", ".join(added_file_names))
+                reply = prompts.added_files.format(
+                    fnames=", ".join(added_file_names))
                 return reply
 
     def add_files_command(self, args):
@@ -51,14 +53,17 @@ class AddCommand(BaseCommand):
                     pass
                 matched_files = [word]
                 if self.coder.repo is not None:
-                    self.coder.repo.git.add(os.path.join(self.coder.root, word))
+                    self.coder.repo.git.add(
+                        os.path.join(self.coder.root, word))
                     commit_message = f"r2: Created and added {word} to git."
-                    self.coder.repo.git.commit("-m", commit_message, "--no-verify")
+                    self.coder.repo.git.commit(
+                        "-m", commit_message, "--no-verify")
             else:
                 return f"No files matched '{word}'"
 
         for matched_file in matched_files:
-            abs_file_path = os.path.abspath(os.path.join(self.coder.root, matched_file))
+            abs_file_path = os.path.abspath(
+                os.path.join(self.coder.root, matched_file))
             if abs_file_path not in self.coder.abs_fnames:
                 self.coder.abs_fnames.add(abs_file_path)
                 added_fnames.append(matched_file)
