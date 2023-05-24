@@ -11,7 +11,7 @@ class SpecFileCommand(BaseCommand):
         super().__init__(io, coder)
 
     def run(self, args, **kwargs):
-        if args.isspace():
+        if isinstance(args, str) and args.isspace():
             self.io.tool_error("Add a file name to use this command")
             return
 
