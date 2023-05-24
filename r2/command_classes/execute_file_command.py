@@ -27,12 +27,12 @@ class ExecuteFileCommand(BaseCommand):
                 return
 
             for word in args.split():
-                git_files = [file for file in files if word in file]
+                args = [file for file in files if word in file]
 
         if kwargs.get("function_name"):
             execute_function = getattr(
                 execute_command, kwargs.get("function_name"))
-        elif len(git_files) == 0:
+        elif len(args) == 0:
             self.io.tool_error(f'File not found in Git Repo: {args}')
             return
         else:
