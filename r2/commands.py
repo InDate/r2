@@ -13,8 +13,7 @@ class Commands:
         "Show help about all commands"
         commands = self.get_commands()
         for cmd in commands:
-            cmd_method_name = f"cmd_{cmd[1:]}"
-            cmd_method = getattr(self, cmd_method_name, None)
+            cmd_method = self.command_methods.get(f"/{cmd}", None)
             if cmd_method:
                 description = cmd_method.__doc__
                 self.io.tool(f"{cmd} {description}")
