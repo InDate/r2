@@ -8,7 +8,8 @@ class DropCommand(BaseCommand):
     def __init__(self, io, coder):
         super().__init__(io, coder)
 
-    def run(self, args, notify=True):
+    def run(self, args, **kwargs):
+        notify = kwargs.get('notify')
 
         for word in args.split():
             matched_files = [
@@ -23,7 +24,7 @@ class DropCommand(BaseCommand):
 
             self.remove_files_from_chat(matched_files, notify)
 
-    def remove_files_from_chat(self, matched_files, notify):
+    def remove_files_from_chat(self, matched_files, notify=False):
         for matched_file in matched_files:
             relative_fname = os.path.relpath(matched_file, self.coder.root)
             self.coder.abs_fnames.remove(matched_file)
