@@ -280,3 +280,13 @@ def remove_unneeded_symbols(text: str) -> str:
     message = re.sub(r'[^a-zA-Z0-9 \/:_\.]+', ' ', text)
     cleaned_text = re.sub(r'([^\w\s])\1+', r'\1', message)
     return cleaned_text
+import re
+
+def extract_last_running_cost(file_path):
+    with open(file_path, 'r') as file:
+        content = file.read()
+    pattern = r'> Total running cost: \$([\d.]+)'
+    matches = re.findall(pattern, content)
+    if matches:
+        return float(matches[-1])
+    return None
