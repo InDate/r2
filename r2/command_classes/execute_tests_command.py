@@ -71,12 +71,12 @@ class ExecuteTestsCommand(BaseCommand):
 
             if check_file_exists(test_file, all_files):
                 # TODO: Add further logic to extend unit_test if change are significant.
-                self.io.queue.enqueue(('execute_command', '/execute_file',
+                self.io.queue.enqueue(('execute_command', '/execute_command',
                                       test_file), to_front=True)
 
             elif self.io.confirm_ask(f"Test file: {test_file} not found, create test now?"):
                 self.io.queue.enqueue(
-                    ('execute_command', '/execute_file', test_file), to_front=True)
+                    ('execute_command', '/execute_command', test_file), to_front=True)
                 self.io.queue.enqueue(('execute_command', '/unit_test', updated_file,
                                       {"create_unit_tests": True, "test_file": test_file}), to_front=True)
                 self.io.queue.enqueue(('execute_command', '/add', updated_file), to_front=True)
