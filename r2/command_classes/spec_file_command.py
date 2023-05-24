@@ -8,6 +8,7 @@ from r2.utils import check_file_exists, get_file, is_file_type
 
 class SpecFileCommand(BaseCommand):
     def __init__(self, io, coder):
+        __doc__ == 'Generates a code2text specifications file for used with LLMs, this is used to for mapping the entire program'
         super().__init__(io, coder)
 
     def run(self, args, **kwargs):
