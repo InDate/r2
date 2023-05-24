@@ -9,10 +9,10 @@ from prompt_toolkit.completion import Completion
 
 class UndoCommand(BaseCommand):
     def __init__(self, io, coder):
-        __doc__ = 'Will undo the last git commit if it was performed by r2'
         super().__init__(io, coder)
+        self.__doc__ = 'Will undo the last git commit if it was performed by r2'
 
-    def run(self, args):
+    def run(self):
         result = self.undo_command(prompts)
         if result.startswith("Error"):
             self.io.tool_error(result)
