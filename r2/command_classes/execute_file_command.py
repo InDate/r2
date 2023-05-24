@@ -20,6 +20,7 @@ class ExecuteFileCommand(BaseCommand):
 
     def run(self, args, **kwargs):
         files = self.coder.get_all_relative_files()
+        result = []
 
         if (isinstance(args, str)):
             if args.isspace() or args == '':
