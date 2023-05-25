@@ -6,22 +6,13 @@ from r2.coder_classes.code_executor import CodeExecutor
 
 from dotenv import load_dotenv
 
-load_dotenv()
-
-api_key = os.environ.get("OPENAI_API_KEY")
-
-if api_key:
-    openai.api_key = api_key
-else:
-    print("Error: 'OPENAI_API_KEY' was not found. Use 'export OPENAI_API_KEY=<your_api_key_here>' to set the key")
-
 
 class Coder(CodeExecutor):
     def __init__(self, main_model, fnames, pretty, show_diffs, auto_commits, io, api_manager, dry_run):
         super().__init__(io, api_manager)
         self.io = io
         self.test_dir = None
-
+        self.last_asked_for_commit_time = float()
         self.auto_commits = auto_commits
         self.dry_run = dry_run
 
@@ -46,4 +37,3 @@ class Coder(CodeExecutor):
         self.pretty = pretty
         self.show_diffs = show_diffs
         self.find_test_directory()
-        self.last_asked_for_commit_time = None

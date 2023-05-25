@@ -12,7 +12,7 @@ class UndoCommand(BaseCommand):
         super().__init__(io, coder)
         self.__doc__ = 'Will undo the last git commit if it was performed by r2'
 
-    def run(self):
+    def run(self, args):
         result = self.undo_command(prompts)
         if result == prompts.undo_command_reply:
             last_commit = self.coder.repo.head.commit

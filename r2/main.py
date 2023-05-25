@@ -2,7 +2,6 @@ import os
 import sys
 import argparse
 from dotenv import load_dotenv
-load_dotenv()
 
 import openai
 from r2.coder import Coder
@@ -126,6 +125,7 @@ def main(args=None, input=None, output=None):
 
 
 if __name__ == "__main__":
+    load_dotenv()
     api_key = os.environ.get("OPENAI_API_KEY")
 
     if api_key:
