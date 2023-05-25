@@ -4,7 +4,8 @@ from pygments.lexers import guess_lexer_for_filename
 from pygments.token import Token
 from prompt_toolkit.styles import Style
 from pygments.util import ClassNotFound
-from prompt_toolkit.shortcuts import PromptSession, prompt, HTML
+from prompt_toolkit import HTML
+from prompt_toolkit.shortcuts import PromptSession, prompt
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.shortcuts import CompleteStyle
@@ -178,7 +179,8 @@ class InputOutput():
         if self.yes:
             res = "yes"
         else:
-            res = prompt(HTML(f'<style fg="green">{question}</style> '), default=default)
+            res = prompt(
+                HTML(f'<style fg="green">{question}</style> '), default=default)
 
         hist = f"{question.strip()} {res.strip()}"
         self.append_chat_history(hist, linebreak=True, blockquote=True)
@@ -191,7 +193,8 @@ class InputOutput():
         if self.yes:
             res = "yes"
         else:
-            res = prompt(HTML(f'<style fg="green">{question}</style> '), default=default)
+            res = prompt(
+                HTML(f'<style fg="green">{question}</style> '), default=default)
 
         hist = f"{question.strip()} {res.strip()}"
         self.append_chat_history(hist, linebreak=True, blockquote=True)
