@@ -159,7 +159,7 @@ class CodeExecutor(GitManager):
         files_mentions = self.check_for_file_mentions(content)
 
         if files_mentions:
-            if not self.io.confirm_ask("Add these files to the chat? [y/n]"):
+            if self.io.confirm_ask("Add these files to the chat? [y/n]"):
                 return
             
             files_added = prompts.added_files.format(fnames=", ".join(files_mentions))
