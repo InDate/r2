@@ -34,19 +34,18 @@ def outer(a, b):
         expected_output = ["def outer(a, b):\n    def inner(x, y):\n        return x * y\n    return inner(a, b)"]
         self.assertEqual(extract_function_definitions(code), expected_output)
 
-    def test_comments_and_docstrings(self):
-        code = """
+def test_comments_and_docstrings(self):
+    code = """
 # This is a comment
 def add(a, b):
-    """Add two numbers."""
+    \"\"\"Add two numbers.\"\"\"
     return a + b
 
 def sub(a, b):
     # This is another comment
     return a - b
 """
-        expected_output = ["def add(a, b):\n    \"\"\"Add two numbers.\"\"\"\n    return a + b", "def sub(a, b):\n    # This is another comment\n    return a - b"]
-        self.assertEqual(extract_function_definitions(code), expected_output)
-
+    expected_output = ["def add(a, b):\n    \"\"\"Add two numbers.\"\"\"\n    return a + b", "def sub(a, b):\n    # This is another comment\n    return a - b"]
+    self.assertEqual(extract_function_definitions(code), expected_output)
 if __name__ == "__main__":
     unittest.main()
