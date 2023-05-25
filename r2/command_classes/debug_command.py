@@ -46,7 +46,8 @@ class DebugCommand(BaseCommand):
     def get_help(self, failing_file, error_message):
         # TODO; Pass exceptions from unit tests that do not contain formatting.
         cleaned_up_message = utils.remove_unneeded_symbols(error_message)
-        self.io.tool(f"Error message: {error_message}")
+        self.io.tool("")
+        self.io.tool_error(f"Error message: {error_message}")
 
         if not self.io.confirm_ask(
                 'An error occured with "%s", would you like to debug now? [y/n]' % '", "'.join(failing_file)):
