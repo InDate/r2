@@ -44,20 +44,22 @@ class ExecuteFileCommand(BaseCommand):
         try:
             while not self.queue.empty():
                 result = self.queue.get()
-                return self.process_queue(result, args)
+                self.process_queue(result, args)
         finally:
-            return self.process_queue(result, args)
+            self.process_queue(result, args)
 
     def process_queue(self, result, file_name):
         # TODO: currently a hack to return last message on queue, need to put queue in IO class
         if result["status"] == "error":
-            message = "Test failed: Starting debugger"
-            kwargs = {"debug": True, "error_message": result["message"]}
-            next_command = ('execute_command', '/debug', file_name, kwargs,)
+            if self.io.confirm_ask(
+                    f'An error occured with "{file_name}", would you like to debug now? [y/n]'):
+                kwargs = {"debug": True, "error_message": result["message"]}
+                next_command = ('execute_command', '/debug',
+                                file_name, kwargs,)
 
-            self.io.queue.enqueue(next_command, to_front=True)
-
-            return message
+                self.io.queue.enqueue(next_command, to_front=True)
+        elif result["status"] == "update":
+            self.io.tool(result['message'])
 
     def completions_execute_file(self, partial):
         files = self.coder.get_all_relative_files()

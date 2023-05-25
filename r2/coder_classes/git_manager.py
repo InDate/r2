@@ -37,7 +37,7 @@ class GitManager(FileManager):
         diff_file_names = self.get_diffs_file_names("HEAD", "--", relative_dirty_fnames)
         
         if not self.io.confirm_ask(
-            f"{', '.join(diff_file_names)} have changed, commit now? [y/n]"
+            "Changes found for '%s', commit now? [y/n]" % "', '".join(diff_file_names)
         ):
             return False
 

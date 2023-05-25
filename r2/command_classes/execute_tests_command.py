@@ -62,7 +62,7 @@ class ExecuteTestsCommand(BaseCommand):
             test_file = os.path.relpath(test_file_abs_path, self.coder.root)
 
             if not self.io.confirm_ask(
-                    f"Execute unit tests for {updated_file}? [y/n]"):
+                    f"Execute unit tests for '{updated_file}'? [y/n]"):
                 self.io.tool(f"Skipped: {test_file}")
                 return
 
@@ -71,7 +71,7 @@ class ExecuteTestsCommand(BaseCommand):
                 self.io.queue.enqueue(('execute_command', '/execute_command', test_file, 
                                        {"function_name":"execute_python_test"}), to_front=True)
 
-            elif self.io.confirm_ask(f"Test file: {test_file} not found, create test now? [y/n]"):
+            elif self.io.confirm_ask(f"'{test_file}' does not exist, create tests now? [y/n]"):
                 self.io.queue.enqueue(('execute_command', '/execute_command', 
                                        test_file, {"function_name":"execute_python_test"}), to_front=True)
                 self.io.queue.enqueue(('execute_command', '/unit_test', updated_file,

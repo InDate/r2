@@ -15,7 +15,7 @@ async def execute_python_test(file, files, queue: Queue):
     try:
         if file == 'all':
             queue.put(
-                {f"status": "status", "message": "Performing unit test with all tests"})
+                {f"status": "status", "update": "Performing unit test with all tests"})
             process = await asyncio.create_subprocess_exec(
                 "python3", "-m", "unittest", "discover", "-s", files,
                 stdout=asyncio.subprocess.PIPE,
@@ -32,7 +32,7 @@ async def execute_python_test(file, files, queue: Queue):
                 raise ValueError("Invalid file type. Only test files.")
 
             queue.put(
-                {f"status": "status", "message": "Performing Unit test: %s" % filename})
+                {f"status": "update", "message": "Unit testing '{file}'..."})
             process = await asyncio.create_subprocess_exec(
                 "python3", "-m", "unittest", filename,
                 stdout=asyncio.subprocess.PIPE,
@@ -49,7 +49,9 @@ async def execute_python_test(file, files, queue: Queue):
         queue.put({"status": "error", "message": str(stderr)})
     elif len(stdout) > 0:
         queue.put({"status": "success", "message": str(stdout)})
-
+    else:
+        queue.put(
+            {"status": "update", "message": "Unit testing '{file}'...passed!"})
     return
 
 
