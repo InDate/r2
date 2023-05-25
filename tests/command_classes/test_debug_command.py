@@ -14,7 +14,6 @@ class TestDebugCommand(unittest.TestCase):
         self.debug_command = DebugCommand(self.io, self.coder)
 
     def mocked_prompt(prompt, mock_inputs):
-    # This returns a MagicMock object with `text` attribute set to the next value from `mock_inputs`
         return MagicMock(spec=Document, text=mock_inputs.pop(0))
     
     def test_run_valid_file_from_chat(self):
