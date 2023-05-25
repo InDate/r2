@@ -82,5 +82,4 @@ async def execute_python_file(file, files, queue: Queue):
         queue.put({"status": "error", "message": str(stderr)})
     elif len(stdout) > 0:
         queue.put({"status": "success", "message": str(stdout)})
-
     return
