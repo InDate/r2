@@ -51,11 +51,8 @@ class ExecuteFileCommand(BaseCommand):
             process.start()
             process.join()
 
-        try:
-            while not self.queue.empty():
-                result = self.queue.get()
-                self.process_queue(result, args)
-        finally:
+        while not self.queue.empty():
+            result = self.queue.get()
             self.process_queue(result, args)
 
     def process_queue(self, result, file_name):
