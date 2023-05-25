@@ -71,7 +71,7 @@ class ExecuteTestsCommand(BaseCommand):
                 self.io.queue.enqueue(('execute_command', '/execute_command', test_file, 
                                        {"function_name":"execute_python_test"}), to_front=True)
 
-            elif self.io.confirm_ask(f"Test file: {test_file} not found, create test now?"):
+            elif self.io.confirm_ask(f"Test file: {test_file} not found, create test now? [y/n]"):
                 self.io.queue.enqueue(('execute_command', '/execute_command', 
                                        test_file, {"function_name":"execute_python_test"}), to_front=True)
                 self.io.queue.enqueue(('execute_command', '/unit_test', updated_file,

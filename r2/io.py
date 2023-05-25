@@ -180,7 +180,7 @@ class InputOutput():
             res = "yes"
         else:
             res = prompt(
-                HTML(f'<style fg="green">{question}</style> '), default=default)
+                HTML(f'<style fg="orange">{question}</style> '), default=default)
 
         hist = f"{question.strip()} {res.strip()}"
         self.append_chat_history(hist, linebreak=True, blockquote=True)
@@ -194,7 +194,7 @@ class InputOutput():
             res = "yes"
         else:
             res = prompt(
-                HTML(f'<style fg="green">{question}</style> '), default=default)
+                HTML(f'<style fg="orange">{question}</style> '), default=default)
 
         hist = f"{question.strip()} {res.strip()}"
         self.append_chat_history(hist, linebreak=True, blockquote=True)

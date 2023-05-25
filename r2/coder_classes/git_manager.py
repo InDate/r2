@@ -34,6 +34,13 @@ class GitManager(FileManager):
             return False
 
         relative_dirty_fnames, diffs = self._get_dirty_files_and_diffs(which)
+        diff_file_names = self.get_diffs_file_names("HEAD", "--", relative_dirty_fnames)
+        
+        if not self.io.confirm_ask(
+            f"{', '.join(diff_file_names)} have changed, commit now? [y/n]"
+        ):
+            return False
+
 
         if self.show_diffs or ask:
             # print so it does not record in tool chat
@@ -43,8 +50,6 @@ class GitManager(FileManager):
 
         if ask:
             commit_message = self._ask_for_commit_message(commit_message, which)
-
-        diff_file_names = self.get_diffs_file_names("HEAD", "--", relative_dirty_fnames)
 
         self.io.queue.enqueue(('execute_command', '/spec_file', diff_file_names))
         self.io.queue.enqueue(('execute_command', '/unit_test', diff_file_names))
