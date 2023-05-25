@@ -58,13 +58,11 @@ class ExecuteFileCommand(BaseCommand):
     def process_queue(self, result, file_name):
         # TODO: currently a hack to return last message on queue, need to put queue in IO class
         if result["status"] == "error":
-            if self.io.confirm_ask(
-                    'An error occured with "%s", would you like to debug now? [y/n]' % '", "'.join(file_name)):
-                kwargs = {"debug": True, "error_message": result["message"]}
-                next_command = ('execute_command', '/debug',
-                                file_name, kwargs,)
+            kwargs = {"debug": True, "error_message": result["message"]}
+            next_command = ('execute_command', '/debug',
+                            file_name, kwargs,)
 
-                self.io.queue.enqueue(next_command, to_front=True)
+            self.io.queue.enqueue(next_command, to_front=True)
         elif result["status"] == "update":
             self.io.tool(result['message'])
 
