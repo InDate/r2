@@ -62,7 +62,7 @@ class ExecuteFileCommand(BaseCommand):
         # TODO: currently a hack to return last message on queue, need to put queue in IO class
         if result["status"] == "error":
             if self.io.confirm_ask(
-                    f'An error occured with "{file_name}", would you like to debug now? [y/n]'):
+                    'An error occured with "%s", would you like to debug now? [y/n]' % '", "'.join(file_name)):
                 kwargs = {"debug": True, "error_message": result["message"]}
                 next_command = ('execute_command', '/debug',
                                 file_name, kwargs,)
