@@ -10,6 +10,7 @@ class AddCommand(BaseCommand):
         super().__init__(io, coder)
 
     def run(self, args):
+        ask = True
         files = self.coder.get_all_relative_files()
 
         if (isinstance(args, str)):
