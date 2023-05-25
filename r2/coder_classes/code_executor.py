@@ -246,7 +246,7 @@ class CodeExecutor(GitManager):
         
         if not confirmed:
             num_tokens = self.api_manager.get_approx_prompt_tokens(self.get_files_messages(), self.main_model)
-            self.io.tool(f'There are {num_tokens} used tokens from {num_files} files and {num_messages} message.')
+            self.io.tool(f'There are {num_tokens} used tokens from {num_files} file(s) and {num_messages} message(s).')
             confirmed = self.io.confirm_ask(
                         f"Clear previous messages and drop files from chat? [y/n]")
         if confirmed: 
