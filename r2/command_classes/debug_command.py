@@ -21,6 +21,7 @@ class DebugCommand(BaseCommand):
         if not file_path:
             self.io.tool_error(
                 "A file contained within the Git Repo is required")
+            return None, None
 
         debug_message = args.split(file_path)
 
