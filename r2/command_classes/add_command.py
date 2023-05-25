@@ -16,7 +16,7 @@ class AddCommand(BaseCommand):
             ask = False
             args = self.parse_input(args, files, add=True)
 
-        added_file_names = self.add_files_command(args, ask=True)
+        added_file_names = self.add_files_command(args, ask)
 
         if not added_file_names:
             self.io.tool_error(f"No files matched '{args}'")
