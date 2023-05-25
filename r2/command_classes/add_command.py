@@ -13,9 +13,10 @@ class AddCommand(BaseCommand):
         files = self.coder.get_all_relative_files()
 
         if (isinstance(args, str)):
+            ask = False
             args = self.parse_input(args, files, add=True)
 
-        added_file_names = self.add_files_command(args)
+        added_file_names = self.add_files_command(args, ask=True)
 
         if not added_file_names:
             self.io.tool_error(f"No files matched '{args}'")
@@ -29,17 +30,18 @@ class AddCommand(BaseCommand):
                     fnames=", ".join(added_file_names))
                 return reply
 
-    def add_files_command(self, matched_files):
+    def add_files_command(self, matched_files, ask=True):
         added_fnames = []
 
         for matched_file in matched_files:
             abs_file_path = os.path.abspath(
                 os.path.join(self.coder.root, matched_file))
             if abs_file_path not in self.coder.abs_fnames:
-                self.io.confirm_ask(
-                    f"File '{matched_file}' is required in the chat, add now? [y/n]")
-                self.coder.abs_fnames.add(abs_file_path)
-                added_fnames.append(matched_file)
+                ask = self.io.confirm_ask(
+                    f"File '{matched_file}' is required in the chat, add now? [y/n]") if ask else True
+                if ask:
+                    self.coder.abs_fnames.add(abs_file_path)
+                    added_fnames.append(matched_file)
             else:
                 self.io.tool(f"'{matched_file}' was previously added.")
 
