@@ -11,10 +11,11 @@ class DebugCommand(BaseCommand):
     def parse_input(self, args, files):
         if args.isspace() or args == '':
             self.io.tool_error("Provide a file name to use this command")
-            return None
+            return None, None
         elif args.split() != 1:
-            self.io.tool_error("Provide an error message to use this command")
-            return None
+            self.io.tool_error(
+                "Provide both the file name and the debug instructions to use this command")
+            return None, None
 
         file_path, error_message = args.split()
 
