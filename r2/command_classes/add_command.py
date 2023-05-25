@@ -36,11 +36,12 @@ class AddCommand(BaseCommand):
             abs_file_path = os.path.abspath(
                 os.path.join(self.coder.root, matched_file))
             if abs_file_path not in self.coder.abs_fnames:
+                self.io.confirm_ask(
+                    f"File '{matched_file}' is required in the chat, add now? [y/n]")
                 self.coder.abs_fnames.add(abs_file_path)
                 added_fnames.append(matched_file)
             else:
-                self.io.tool(f"{matched_file} is already in the chat")
-                return
+                self.io.tool(f"'{matched_file}' was previously added.")
 
         return added_fnames
 
