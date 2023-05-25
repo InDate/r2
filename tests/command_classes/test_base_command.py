@@ -4,11 +4,18 @@ from unittest.mock import MagicMock
 from r2.command_classes.base_command import BaseCommand
 
 class TestBaseCommand(unittest.TestCase):
+import tempfile
+
+class TestBaseCommand(unittest.TestCase):
     def setUp(self):
         self.io_mock = MagicMock()
         self.coder_mock = MagicMock()
-        self.coder_mock.root = os.getcwd()
+        self.test_dir = tempfile.TemporaryDirectory()
+        self.coder_mock.root = self.test_dir.name
         self.base_command = BaseCommand(self.io_mock, self.coder_mock)
+
+    def tearDown(self):
+        self.test_dir.cleanup()
 
     def test_has_extension(self):
         self.assertTrue(self.base_command.has_extension("file.txt"))
