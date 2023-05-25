@@ -238,15 +238,16 @@ class CodeExecutor(GitManager):
         self.get_file_mentions(content)
 
     def clear_chat(self, confirmed=False):
-        if self.current_messages is None and self.abs_fnames is None:
+        num_messages = len(self.current_messages)
+        num_files = len(self.abs_fnames)
+        if num_messages == 0 and num_messages == 0:
             print("No files or previous chat messages to clear")
             return
         
         if not confirmed:
-            num_messages = len(self.current_messages)
-            num_tokens = self.api_manager.get_approx_prompt_tokens(self.current_messages)
+            num_tokens = self.api_manager.get_approx_prompt_tokens(self.current_messages, self.main_model)
             self.io.tool(f'There are currently {num_messages} messages with {num_tokens} \
-                and {self.abs_fnames} files within the content.')
+                and {num_files} files within the content.')
             confirmed = self.io.confirm_ask(
                         f"Clear previous messages and drop files from chat? [y/n]")
         if confirmed: 
