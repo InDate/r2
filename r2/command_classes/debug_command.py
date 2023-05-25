@@ -28,6 +28,8 @@ class DebugCommand(BaseCommand):
             self.io.tool_error(
                 "Provide debug instructions after file name")
             return None, None
+        else:
+            debug_message = debug_message[1]
 
         return file_path, debug_message
 
