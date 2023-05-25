@@ -47,5 +47,7 @@ def sub(a, b):
 """
     expected_output = ["def add(a, b):\n    \"\"\"Add two numbers.\"\"\"\n    return a + b", "def sub(a, b):\n    # This is another comment\n    return a - b"]
     self.assertEqual(extract_function_definitions(code), expected_output)
+    expected_output = ["def add(a, b):\n    \"\"\"Add two numbers.\"\"\"\n    return a + b", "def sub(a, b):\n    # This is another comment\n    return a - b"]
+    self.assertEqual(extract_function_definitions(code), expected_output)
 if __name__ == "__main__":
     unittest.main()
