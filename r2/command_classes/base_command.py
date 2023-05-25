@@ -14,7 +14,7 @@ class BaseCommand:
 
     def has_extension(self, string):
         _, file_extension = os.path.splitext(string)
-        if file_extension is not None:
+        if '.' in file_extension:
             return True
         else:
             return False
