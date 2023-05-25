@@ -239,6 +239,7 @@ class CodeExecutor(GitManager):
 
     def clear_chat(self, confirmed=False):
         if not confirmed:
+            self.io.tool(f'There are currently {len(self.current_messages)} previous messages and {self.abs_fnames} files within the content.')
             confirmed = self.io.confirm_ask(
                         f"Clear previous messages and drop files from chat? [y/n]")
         if confirmed: 
