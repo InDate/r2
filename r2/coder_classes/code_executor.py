@@ -240,7 +240,7 @@ class CodeExecutor(GitManager):
     def clear_chat(self, confirmed=False):
         num_messages = len(self.current_messages)
         num_files = len(self.abs_fnames)
-        if num_messages == 0 and num_messages == 0:
+        if num_messages == 0 and num_files == 0:
             print("No files or previous chat messages to clear")
             return
         
