@@ -19,9 +19,7 @@ class AddCommand(BaseCommand):
 
         added_file_names = self.add_files_command(args, ask)
 
-        if not added_file_names:
-            self.io.tool_error(f"No files matched '{args}'")
-        else:
+        if added_file_names:
             for fname in added_file_names:
                 self.io.tool(f"Added {fname} to the chat")
 

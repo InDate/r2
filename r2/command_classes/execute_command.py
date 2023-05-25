@@ -33,7 +33,7 @@ async def execute_python_test(file, files, queue):
             queue.put(
                 {"status": "update", "message": f"Unit testing '{file}'..."})
             process = await asyncio.create_subprocess_shell(
-                "python3", "-m", "unittest", filename,
+                "python3 -m unittest %s" % filename,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )
