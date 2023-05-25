@@ -245,7 +245,7 @@ class CodeExecutor(GitManager):
             return
         
         if not confirmed:
-            num_tokens = self.api_manager.get_approx_prompt_tokens(self.current_messages, self.main_model)
+            num_tokens = self.api_manager.get_approx_prompt_tokens(self.get_files_messages(), self.main_model)
             self.io.tool(f'There are currently {num_messages} messages with {num_tokens} \
                 and {num_files} files within the content.')
             confirmed = self.io.confirm_ask(
