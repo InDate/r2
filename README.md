@@ -65,15 +65,14 @@ For more information, run `r2 --help`.
 * `/add <file>`: Add matching files to the chat session.
 * `/drop <file>`: Remove matching files from the chat session.
 * `/ls`: List all known files and those included in the chat session.
-* `/commit [message]`: Commit outstanding changes to the chat session files. Use this to commit edits you made outside the chat, with your editor or git commands. r2 will provide a commit message if you don't.
+* `/commit [message]`: Commit outstanding changes to the chat session files. Use this to commit edits you made outside the chat, with your editor or git commands.
 * `/undo`: Undo the last git commit if it was done by r2.
 * `/diff`: Display the diff of the last r2 commit.
-* `/debug`: Display the diff of the last r2 commit.
-* `/unit_test`: Display the diff of the last r2 commit.
-* `/spec_file`: Display the diff of the last r2 commit.
-* `/test_connection`: Display the diff of the last r2 commit.
-* `/execute_file`: Display the diff of the last r2 commit.
-
+* `/debug <file>`: Provide a program that is failing and r2 will execute file, upload relevant files and errors and then offer suggestions on how to fix.
+* `/unit_test <file>`: Used to unit test a program file. r2 will prompt to build unit_tests if not available. 
+* `/spec_file <file>`: Build a code2text specification. Useful for describing the whole program in small context windows
+* `/test_connection`: Test the connection to GPT without sending additional files or chat context
+* `/execute_file <file>`: Used to execute files and commands.
 
 To use a command, simply type it in the chat input followed by any required arguments.
 
@@ -89,14 +88,8 @@ To use a command, simply type it in the chat input followed by any required argu
 
 ## Limitations
 
-You probably need GPT-4 api access to use `r2`.
-You can invoke it with `r2 -3` to try using gpt-3.5-turbo, but it will almost certainly fail to function correctly.
-GPT-3.5 is unable to consistently follow directions to generate concise code edits in a stable, parsable format.
-
 You can only use `r2` to edit code that fits in the GPT context window.
 For GPT-4 that is 8k tokens.
 It helps to be selective about how many source files you discuss with `r2` at one time.
 You might consider refactoring your code into more, smaller files (which is usually a good idea anyway).
 You can use `r2` to help perform such refactorings, if you start before the files get too large.
-
-If you have access to gpt-4-32k, I would be curious to hear how it works with r2.
