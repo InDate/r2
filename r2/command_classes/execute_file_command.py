@@ -13,7 +13,8 @@ def run_async_function(func, *args, timeout=5):
         result = loop.run_until_complete(
             asyncio.wait_for(func(*args), timeout=timeout))
     except asyncio.TimeoutError:
-        print("The function took too long to complete.")
+        print(
+            f"The function '{func}' with args '{args}' took too long to complete and was stopped after {timeout} seconds.")
         result = None  # You can set a default value or handle the situation differently
     finally:
         loop.close()
