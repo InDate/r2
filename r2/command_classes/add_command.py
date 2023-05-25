@@ -39,7 +39,8 @@ class AddCommand(BaseCommand):
                 self.coder.abs_fnames.add(abs_file_path)
                 added_fnames.append(matched_file)
             else:
-                return f"{matched_file} is already in the chat"
+                self.io.tool(f"{matched_file} is already in the chat")
+                return
 
         return added_fnames
 

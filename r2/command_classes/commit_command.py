@@ -8,7 +8,6 @@ class CommitCommand(BaseCommand):
     def run(self, args):
         result = self.commit_command(args)
 
-        # TODO commit_command is not returning a result.
         if result:
             self.io.tool_error(result)
         else:
@@ -18,9 +17,11 @@ class CommitCommand(BaseCommand):
         "Commit edits to chat session files made outside the chat (commit message optional)"
 
         if not self.coder.repo:
-            return "No git repository found."
+            self.io.tool_error("No git repository found.")
+            return
 
         if not self.coder.repo.is_dirty():
-            return "No more changes to commit."
+            self.io.tool_error("No more changes to commit.")
+            return
 
         self.coder.auto_commit()
