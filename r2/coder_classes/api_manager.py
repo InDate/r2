@@ -18,7 +18,7 @@ def extract_content(messages):
 
 
 class ApiManager:
-    def __init__(self, total_cost):
+    def __init__(self, total_cost=float):
         self.total_prompt_tokens = 0
         self.total_completion_tokens = 0
         self.total_cost = total_cost
