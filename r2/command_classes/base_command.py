@@ -20,7 +20,7 @@ class BaseCommand:
             return False
 
     def create_files(self, word):
-        if self.has_extension(word):
+        if not self.has_extension(word):
             self.io.tool_error(
                 f"Expecting directory and file with extension, got: '{word}'")
             return
