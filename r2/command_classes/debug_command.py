@@ -8,39 +8,42 @@ class DebugCommand(BaseCommand):
     def __init__(self, io, coder):
         super().__init__(io, coder)
 
-    def parse_input(self, args, files):
+    def parse_input(self, args):
         if args.isspace() or args == '':
             self.io.tool_error("Provide a file name to use this command")
             return None, None
-        elif args.split() != 1:
-            self.io.tool_error(
-                "Provide both the file name and the debug instructions to use this command")
-            return None, None
 
-        file_path, error_message = args.split()
-
-        if not [file for file in files if file_path in file]:
+        file_path = args.split()[0]
+        existing_git_files = self.coder.get_all_relative_files()
+        if not [file for file in existing_git_files if file_path in file]:
             file_path = self.create_files(file_path)
 
-        return file_path, error_message
+        if not file_path:
+            self.io.tool_error(
+                "A file contained within the Git Repo is required")
+
+        debug_message = args.split(file_path)
+
+        if len(debug_message) != 2:
+            self.io.tool_error(
+                "Provide debug instructions after file name")
+            return None, None
+
+        return file_path, debug_message
 
     def run(self, args, **kwargs):
         ''' 
             running debug command means adding files to the chat for the robot to debug with.
             running debug means passing debug messages in argument
         '''
-        files = self.coder.get_all_relative_files()
-
-        if (isinstance(args, str)):
-            args, error_message = self.parse_input(args, files)
-
         if kwargs.get("debug"):
             debug_message = kwargs.get("error_message")
             self.get_help(args, debug_message)
-        elif args and error_message:
-            self.io.queue.enqueue(('execute_command', '/add', args))
-            self.io.queue.enqueue(('send_new_command_message', error_message,
-                                   "Expert Debugger"))
+        elif (isinstance(args, str)):
+            args, debug_message = self.parse_input(args)
+
+        if args and debug_message:
+            self.get_help(args, debug_message)
 
     def get_help(self, failing_file, error_message):
         # TODO; Pass exceptions from unit tests that do not contain formatting.
