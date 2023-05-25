@@ -245,7 +245,7 @@ class CodeExecutor(GitManager):
             return
         
         if not confirmed:
-            all_messages = self.get_content_messages()
+            all_messages = self.get_content_messages('')
             num_messages = len(all_messages)
             num_tokens = self.api_manager.get_approx_prompt_tokens(all_messages, self.main_model)
             self.io.tool(f'There are {num_tokens} used tokens from {num_files} file(s) and {num_messages} message(s).')
