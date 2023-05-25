@@ -54,8 +54,13 @@ class BaseCommand:
             return None
         elif args == ' all' or args == 'all':
             return ['all']
-        elif add:
-            args += self.create_files(args)
 
         for word in args.split():
-            return [file for file in files if word in file]
+            file_found = [file for file in files if word in file]
+
+        if file_found:
+            return file_found
+        elif add:
+            return [self.create_files(args)]
+        else:
+            self.io.tool_error(f"No files matched '{args}'")
