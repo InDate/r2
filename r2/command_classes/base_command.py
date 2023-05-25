@@ -12,7 +12,7 @@ class BaseCommand:
 
     def has_extension(self, string):
         _, file_extension = os.path.splitext(string)
-        if '.' in file_extension:
+        if file_extension and '.' in file_extension:
             return True
         else:
             return False

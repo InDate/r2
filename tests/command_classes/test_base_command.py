@@ -7,6 +7,7 @@ class TestBaseCommand(unittest.TestCase):
     def setUp(self):
         self.io_mock = MagicMock()
         self.coder_mock = MagicMock()
+        self.coder_mock.root = os.getcwd()
         self.base_command = BaseCommand(self.io_mock, self.coder_mock)
 
     def test_has_extension(self):
