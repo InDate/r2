@@ -158,7 +158,10 @@ class CodeExecutor(GitManager):
     def get_file_mentions(self, content):
         files_mentions = self.check_for_file_mentions(content)
 
-        if files_mentions and self.io.confirm_ask("Add these files to the chat?"):
+        if files_mentions:
+            if not self.io.confirm_ask("Add these files to the chat?"):
+                return
+            
             files_added = prompts.added_files.format(fnames=", ".join(files_mentions))
             message = [self.get_message("user", files_added)]
             self.io.queue.enqueue(('send_new_command_message', message, "New Files"), to_front=True)
