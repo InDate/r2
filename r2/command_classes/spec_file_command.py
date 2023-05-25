@@ -74,4 +74,4 @@ class SpecFileCommand(BaseCommand):
             else:
                 self.io.tool(f"Spec File Found: {spec_file_git_path}")
 
-        return spec_file_git_path
+        return None
