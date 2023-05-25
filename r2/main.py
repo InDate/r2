@@ -1,6 +1,10 @@
 import os
 import sys
 import argparse
+from dotenv import load_dotenv
+load_dotenv()
+
+import openai
 from r2.coder import Coder
 from r2.coder_classes.api_manager import ApiManager
 from r2.io import InputOutput
@@ -122,5 +126,12 @@ def main(args=None, input=None, output=None):
 
 
 if __name__ == "__main__":
-    status = main()
-    sys.exit(status)
+    api_key = os.environ.get("OPENAI_API_KEY")
+
+    if api_key:
+        openai.api_key = api_key
+        status = main()
+        sys.exit(status)
+    else:
+        print("Error: 'OPENAI_API_KEY' was not found. Use 'export OPENAI_API_KEY=<your_api_key_here>' to set the key")
+        sys.exit(1)

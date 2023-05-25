@@ -8,7 +8,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.environ.get("OPENAI_API_KEY")
+
+if api_key:
+    openai.api_key = api_key
+else:
+    print("Error: 'OPENAI_API_KEY' was not found. Use 'export OPENAI_API_KEY=<your_api_key_here>' to set the key")
 
 
 class Coder(CodeExecutor):
