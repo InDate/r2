@@ -1,6 +1,5 @@
 import os
 import asyncio
-from multiprocessing import Queue
 
 
 def find_common_root(files):
@@ -11,7 +10,7 @@ def find_common_root(files):
         return os.getcwd()
 
 
-async def execute_python_test(file, files, queue: Queue):
+async def execute_python_test(file, files, queue):
     try:
         if file == 'all':
             queue.put(
@@ -33,7 +32,7 @@ async def execute_python_test(file, files, queue: Queue):
 
             queue.put(
                 {"status": "update", "message": f"Unit testing '{file}'..."})
-            process = await asyncio.create_subprocess_exec(
+            process = await asyncio.create_subprocess_shell(
                 "python3", "-m", "unittest", filename,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
@@ -45,17 +44,16 @@ async def execute_python_test(file, files, queue: Queue):
         queue.put({"status": "error", "message": str(e)})
         raise
 
-    if returncode != 0:
-        queue.put({"status": "error", "message": str(stderr)})
-    elif len(stdout) > 0:
-        queue.put({"status": "success", "message": str(stdout)})
-    else:
+    if returncode == 0:
         queue.put(
-            {"status": "update", "message": f"Unit testing '{file}'...passed!"})
-    return
+            {"status": "update", "message": f"Unit testing '{file}'...passed."})
+        queue.put(
+            {"status": "success", "message": f"Process complete with stdout message {stdout.decode()}"})
+    else:
+        queue.put({"status": "error", "message": stderr.decode()})
 
 
-async def execute_python_file(file, files, queue: Queue):
+async def execute_python_file(file, files, queue):
     "Execute a Python file"
     root = find_common_root(files)
     filename = os.path.abspath(os.path.join(root, file))
