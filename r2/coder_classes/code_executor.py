@@ -159,7 +159,7 @@ class CodeExecutor(GitManager):
         files_mentions = self.check_for_file_mentions(content)
 
         if files_mentions:
-            if not self.io.confirm_ask("Add these files to the chat?"):
+            if not self.io.confirm_ask("Add these files to the chat? [y/n]"):
                 return
             
             files_added = prompts.added_files.format(fnames=", ".join(files_mentions))
@@ -240,7 +240,7 @@ class CodeExecutor(GitManager):
     def clear_chat(self, confirmed=False):
         if not confirmed:
             confirmed = self.io.confirm_ask(
-                        f"Clear previous messages and drop files from chat [y/n]?")
+                        f"Clear previous messages and drop files from chat? [y/n]")
         if confirmed: 
             self.current_messages = []
             self.io.queue.enqueue(('execute_command', '/drop', 'all', {"disable_notify":True}), to_front=True)

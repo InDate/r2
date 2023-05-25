@@ -62,7 +62,7 @@ class ExecuteTestsCommand(BaseCommand):
             test_file = os.path.relpath(test_file_abs_path, self.coder.root)
 
             if not self.io.confirm_ask(
-                    f"Execute unit tests for {updated_file} [y/n]?"):
+                    f"Execute unit tests for {updated_file}? [y/n]"):
                 self.io.tool(f"Skipped: {test_file}")
                 return
 
