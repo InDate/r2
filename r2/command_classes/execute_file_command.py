@@ -5,11 +5,20 @@ from r2.command_classes import execute_command
 from prompt_toolkit.completion import Completion
 
 
-def run_async_function(func, *args):
+def run_async_function(func, *args, timeout=5):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(func(*args))
-    loop.close()
+
+    try:
+        result = loop.run_until_complete(
+            asyncio.wait_for(func(*args), timeout=timeout))
+    except asyncio.TimeoutError:
+        print("The function took too long to complete.")
+        result = None  # You can set a default value or handle the situation differently
+    finally:
+        loop.close()
+
+    return result
 
 
 class ExecuteFileCommand(BaseCommand):
