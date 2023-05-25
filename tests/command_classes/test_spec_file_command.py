@@ -12,7 +12,7 @@ class TestSpecFileCommand(unittest.TestCase):
 
     def test_run_empty_args(self):
         self.spec_file_command.run("", create_spec_file=False)
-    self.io.tool_error.assert_called_with("Provide a file name to use this command")
+        self.io.tool_error.assert_called_with("Provide a file name to use this command")
 
     def test_run_valid_file(self):
         self.coder.get_all_relative_files.return_value = ["file1.py", "file2.py"]
