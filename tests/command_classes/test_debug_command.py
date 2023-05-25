@@ -26,7 +26,8 @@ class TestDebugCommand(unittest.TestCase):
         self.coder.get_all_relative_files.return_value = []
         
         with patch.object(PromptSession, 'prompt', side_effect=self.mocked_prompt(mock_inputs)):
-            self.debug_command.run("invalid_file.py Error: division by zero")
+            with patch("builtins.open", MagicMock()):
+                self.debug_command.run("invalid_file.py Error: division by zero")
         
         self.assertEqual(self.io.queue.enqueue.call_count, 0)
         self.io.tool_error.assert_called()
