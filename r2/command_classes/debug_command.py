@@ -34,13 +34,8 @@ class DebugCommand(BaseCommand):
         return file_path, debug_message
 
     def run(self, args, **kwargs):
-        ''' 
-            running debug command means adding files to the chat for the robot to debug with.
-            running debug means passing debug messages in argument
-        '''
         if kwargs.get("debug"):
             debug_message = kwargs.get("error_message")
-            self.get_help(args, debug_message)
         elif (isinstance(args, str)):
             args, debug_message = self.parse_input(args)
 
@@ -50,7 +45,7 @@ class DebugCommand(BaseCommand):
     def get_help(self, failing_file, error_message):
         # TODO; Pass exceptions from unit tests that do not contain formatting.
         cleaned_up_message = utils.remove_unneeded_symbols(error_message)
-        self.io.tool_error(f"Error message: {cleaned_up_message}")
+        self.io.tool(f"Error message: {cleaned_up_message}")
 
         messages = [
             self.coder.get_message("system", prompts.system_reminder),

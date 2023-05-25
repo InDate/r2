@@ -1,5 +1,7 @@
 import os
+import re
 from rich.prompt import Confirm
+from r2.utils import has_whitespace
 
 
 class BaseCommand:
@@ -11,7 +13,19 @@ class BaseCommand:
         raise NotImplementedError(
             "The run method must be implemented in the derived class.")
 
+    def has_extension(self, string):
+        _, file_extension = os.path.splitext(string)
+        if file_extension is not None:
+            return True
+        else:
+            return False
+
     def create_files(self, word):
+        if self.has_extension(word):
+            self.io.tool_error(
+                f"Expecting directory and file with extension, got: '{word}'")
+            return
+
         if self.coder.repo is not None and word is not None:
             create_file = Confirm.ask(
                 f"No files matched '{word}'. Do you want to create the file and add it to git?",
