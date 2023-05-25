@@ -88,6 +88,9 @@ class ApiManager:
         Args:
         model (str): The model used for the API call.
         """
+        if self.total_cost == None:
+            return
+
         self.total_prompt_tokens += self.prompt_tokens
         self.total_completion_tokens += self.completion_tokens
 
