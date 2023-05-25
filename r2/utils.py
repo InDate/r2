@@ -8,11 +8,6 @@ from pathlib import Path
 # from r2.dump import dump
 
 
-def has_whitespace(string):
-    pattern = r"\s"
-    return bool(re.search(pattern, string))
-
-
 def try_dotdotdots(whole, part, replace):
     """
     See if the edit block has ... lines.

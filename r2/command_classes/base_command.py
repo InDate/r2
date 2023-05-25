@@ -1,7 +1,6 @@
 import os
 import re
 from rich.prompt import Confirm
-from r2.utils import has_whitespace
 
 
 class BaseCommand:
